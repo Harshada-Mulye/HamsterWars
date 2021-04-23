@@ -9,7 +9,7 @@ const score = require('./routes/score.js')
 const fewMatches = require('./routes/fewMatches.js')
 
 
-const PORT = 1339
+const PORT = process.env.PORT || 1339
 const staticFolder = path.join(__dirname, 'static')
 
 app.use((req, res, next) => {
