@@ -1,6 +1,14 @@
 var admin = require("firebase-admin");
 
-const serviceAccount = require("./firebase-private-key.json");
+//const serviceAccount = require("./firebase-private-key.json");
+
+let serviceAccount;
+try {
+    serviceAccount = require('./firebase-private-key.json')
+} catch {
+    serviceAccount = JSON.parse(process.env.PRIVATE_KEY)
+}
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
