@@ -8,6 +8,27 @@ router.get("/", async (req, res) => {
   res.send(items);
 });
 
+
+router.get("/matchWinners/:id", async (req, res) => {
+	const id = req.params.id;
+	const items = await getDatabase.getCollection("matches");
+	//res.send(item);
+	let matchWinners=[];
+	
+   for(let i=0;i<items.length;i++)
+   {
+	   if(items[i].winnerid==id)
+	   {
+		   matchWinners.push(items[i].id)
+		  // matchWinners.matchid=items[i].winnerid
+		   //break;
+	   }
+
+   }
+   res.send(matchWinners)
+	
+  });
+
 router.get("/winners", async (req, res) => {
   const items = await getDatabase.getCollection("matches");
   let result = items.reduce(function (acc, curr) {
@@ -63,11 +84,15 @@ router.get("/losers", async (req, res) => {
   res.send(topfive);
 });
 
+
+
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const item = await getDatabase.getDocByID("matches", id);
   res.send(item);
 });
+
+
 
 router.post("/", async (req, res) => {
   const obj = req.body;

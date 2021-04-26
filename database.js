@@ -2,13 +2,20 @@ var admin = require("firebase-admin");
 
 //const serviceAccount = require("./firebase-private-key.json");
 
-let serviceAccount;
+/*let serviceAccount;
 try {
-    serviceAccount = require('./firebase-private-key.json')
+  serviceAccount = require("./firebase-private-key.json");
 } catch {
-    serviceAccount = JSON.parse(process.env.PRIVATE_KEY)
+  serviceAccount = JSON.parse(process.env.PRIVATE_KEY);
+}*/
+let serviceAccount;
+if( process.env.PRIVATE_KEY ) {
+	// På Heroku
+	serviceAccount = JSON.parse(process.env.PRIVATE_KEY)
+} else {
+	// Lokalt (på min dator)
+	serviceAccount = require("./firebase-private-key.json");
 }
-
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
