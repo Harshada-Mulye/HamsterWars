@@ -59,6 +59,7 @@ const postToCollection = async (coll, obj) => {
     if (obj.constructor === Object && Object.keys(obj).length === 0) {
       return 400;
     }
+	
     const docRef = await db.collection(coll).add(obj);
     return docRef.id;
   } catch (error) {

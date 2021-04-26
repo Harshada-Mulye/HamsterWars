@@ -89,6 +89,8 @@ router.get("/losers", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const item = await getDatabase.getDocByID("matches", id);
+
+  
   res.send(item);
 });
 
@@ -101,7 +103,12 @@ router.post("/", async (req, res) => {
     return;
   }
   const docRef = await getDatabase.postToCollection("matches", obj);
-  res.send({ id: docRef });
+  const newMatch = {
+	winnerid: req.body.winnerid,
+	loserid: req.body.loserid,
+    id:docRef 
+}
+  res.send(newMatch);
 });
 
 router.put("/:id", async (req, res) => {

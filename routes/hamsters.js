@@ -36,9 +36,24 @@ router.post("/", async (req, res) => {
     res.sendStatus(400);
     return;
   }
+  console.log('1')
 
   const docRef = await getDatabase.postToCollection("hamsters", obj);
-  res.send({ id: docRef });
+
+  const newHamster = {
+	name: req.body.name,
+	age: req.body.age,
+	favFood: req.body.favFood,
+	loves: req.body.loves,
+	imgName: req.body.imgName,
+	wins: 0,
+	defeats: 0,
+	games: 0,
+	id:docRef 
+}
+
+  res.send(newHamster)
+
 });
 
 router.put("/:id", async (req, res) => {

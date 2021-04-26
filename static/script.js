@@ -14,6 +14,7 @@ fetchButton.addEventListener('click', async event => {
 
 		let text = JSON.stringify(json)
 		display.innerHTML = text
+	
 
 	} catch {
 		console.log('Something went wrong');
