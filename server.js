@@ -7,7 +7,7 @@ const matches = require('./routes/matches.js')
 const defeated = require('./routes/defeated.js')
 const score = require('./routes/score.js')
 const fewMatches = require('./routes/fewMatches.js')
-
+const manyMatches = require('./routes/manyMatches.js')
 
 const PORT = process.env.PORT || 1339
 const staticFolder = path.join(__dirname, 'static')
@@ -27,6 +27,7 @@ app.use('/matches', matches)
 app.use('/defeated', defeated)
 app.use('/score', score)
 app.use('/fewMatches', fewMatches)
+app.use('/manyMatches', manyMatches)
 
 app.listen(PORT, () => {
 	console.log('Server listening on port ' + PORT);
