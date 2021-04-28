@@ -2,36 +2,31 @@ const getDatabase = require("../database.js");
 //const db=getDatabase();
 const express = require("express");
 const router = express.Router();
+db = getDatabase.getDatabase()
 
 router.get("/", async (req, res) => {
-  const hamsters = await getDatabase.getCollection("hamsters");
-  const matches = await getDatabase.getCollection("matches");
-  let manyMatches = [];
-  for (let i = 0; i < hamsters.length; i++) {
-    for (let j = 0; j < matches.length; j++) {
-      if (
-        hamsters[i].id == matches[j].winnerid ||
-        hamsters[i].id == matches[j].loserid
-      ) {
-        manyMatches.push(hamsters[i].id);
-      }
-    }
-  }
+	//result = await db.collection('hamsters').orderBy('games', 'desc').limit(5).get();
+	let items = []
+	result = await db.collection('hamsters').orderBy('games', 'desc').get();
+	result.forEach(doc => {
+		const data = doc.data()
+		data.id = doc.id
+		items.push(data)
+	});
+   
 
-  const countUnique = (manyMatches) => {
-    const counts = {};
-    for (var i = 0; i < manyMatches.length; i++) {
-      counts[manyMatches[i]] = 1 + (counts[manyMatches[i]] || 0);
-    }
-    return counts;
-  };
-  let result = [];
-  result = countUnique(manyMatches);
-  console.log(typeof result);
+	console.log(items)
+	const hamsters = []
 
-  let entries = Object.entries(result);
-  let sorted = entries.sort((a, b) => b[1] - a[1]);
-  const topfive = sorted.slice(0, 5);
-  res.send(topfive);
+    for (var i = 0; i < items.length; i++) {
+		console.log(items[i].games)
+        hamsters.push(items[i])
+       // if(items[i].games != items[i+1].games) {
+         //   break
+        //}
+    }
+
+    res.send(hamsters)
+
 });
 module.exports = router;

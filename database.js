@@ -46,12 +46,22 @@ const getCollection = async (coll) => {
 };
 
 const getDocByID = async (coll, id) => {
-  const docRef = await db.collection(coll).doc(id).get();
-  if (!docRef.exists) {
-    return 404;
-  }
-  const data = docRef.data();
-  return data;
+	try{
+        if(!id) {
+            return 400
+        }
+
+        const docRef = await db.collection(coll).doc(id).get()
+        if(!docRef.exists) {
+            return 404
+        }
+
+        const data = docRef.data()
+        data.id = docRef.id
+        return data
+    } catch (error) {
+        return 500
+    }
 };
 
 const postToCollection = async (coll, obj) => {
@@ -61,6 +71,11 @@ const postToCollection = async (coll, obj) => {
     }
 	
     const docRef = await db.collection(coll).add(obj);
+	
+    if(typeof docRef === 'number') {
+        res.sendStatus(docRef)
+        return
+    }
     return docRef.id;
   } catch (error) {
     return 500;
@@ -111,4 +126,5 @@ module.exports = {
   postToCollection,
   putToCollection,
   deleteFromCollection,
+ 
 };

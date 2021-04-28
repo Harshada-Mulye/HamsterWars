@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const getDatabase = require("../database.js");
-//const db = getDatabase()
+db = getDatabase.getDatabase()
+
 
 router.get("/", (req, res) => {
   res.send("hello");
@@ -11,40 +12,57 @@ router.get("/", (req, res) => {
 router.get("/:challanger/:defender", async (req, res) => {
   const challanger = req.params.challanger;
   const defender = req.params.defender;
+  let challengerItems = []
+  let defenderItems=[]
+  const challangerWins = await db.collection('matches').where('winnerId', '==', challanger).get()
+  const challangerLoses = await db.collection('matches').where( 'loserId', '==', challanger).get()
 
-  const items = await getDatabase.getCollection("matches");
-  let score = [];
-  for (var i = 0; i < items.length; ++i) {
-    let opt_one =
-      items[i].winnerid === challanger && items[i].loserid === defender;
-    let opt_two =
-      items[i].winnerid === defender && items[i].loserid === challanger;
-    if (opt_one || opt_two) {
-      score.push(items[i]);
-    }
-  }
 
-  let result = score.reduce(function (acc, curr) {
-    // Check if there exist an object in empty array whose winnerId matches
-    let isElemExist = acc.findIndex(function (item) {
-      return item.winnerid === curr.winnerid;
-    });
-    if (isElemExist === -1) {
-      let obj = {};
-      obj.winnerid = curr.winnerid;
-      obj.count = 1;
-      obj.winnerid = curr.winnerid;
-      acc.push(obj);
-    } else {
-      acc[isElemExist].count += 1;
-    }
-    return acc;
-  }, []);
-  result.sort(function (a, b) {
-    return parseFloat(b.count) - parseFloat(a.count);
-  });
-
-  res.send(result);
+  challangerWins.forEach(doc => {
+	const data = doc.data()
+	data.id = doc.id
+	challengerItems.push(data)
 });
+
+challangerLoses.forEach(doc => {
+	const data = doc.data()
+	data.id = doc.id
+	defenderItems.push(data)
+})
+
+
+  let games = []
+ 
+    challengerItems.forEach(game => {
+		console.log('1')
+        if(game.loserId == defender) {
+        games.push(game)
+        }
+    });
+
+    defenderItems.forEach(game => {
+		console.log('2')
+        if(game.winnerId == defender) {
+        games.push(game)
+        }
+    });
+	console.log(games)
+    let gameScore = {
+        challangerWins: 0,
+        defenderWins: 0
+    }
+
+    games.forEach(game => {
+        if(game.winnerId === challanger) {
+console.log(gameScore)			
+            gameScore.challangerWins++
+        }
+        if(game.winnerId === defender) {
+			console.log(gameScore)
+            gameScore.defenderWins++
+        }
+});
+res.send(gameScore)
+})
 
 module.exports = router;
