@@ -21,9 +21,7 @@ router.get("/", async (req, res) => {
     for (var i = 0; i < items.length; i++) {
 		console.log(items[i].games)
         hamsters.push(items[i])
-       // if(items[i].games != items[i+1].games) {
-         //   break
-        //}
+     
     }
 
     res.send(hamsters)

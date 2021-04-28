@@ -9,12 +9,12 @@ try {
   serviceAccount = JSON.parse(process.env.PRIVATE_KEY);
 }*/
 let serviceAccount;
-if( process.env.PRIVATE_KEY ) {
-	// På Heroku
-	serviceAccount = JSON.parse(process.env.PRIVATE_KEY)
+if (process.env.PRIVATE_KEY) {
+  // På Heroku
+  serviceAccount = JSON.parse(process.env.PRIVATE_KEY);
 } else {
-	// Lokalt (på min dator)
-	serviceAccount = require("./firebase-private-key.json");
+  // Lokalt (på min dator)
+  serviceAccount = require("./firebase-private-key.json");
 }
 
 admin.initializeApp({
@@ -46,22 +46,22 @@ const getCollection = async (coll) => {
 };
 
 const getDocByID = async (coll, id) => {
-	try{
-        if(!id) {
-            return 400
-        }
-
-        const docRef = await db.collection(coll).doc(id).get()
-        if(!docRef.exists) {
-            return 404
-        }
-
-        const data = docRef.data()
-        data.id = docRef.id
-        return data
-    } catch (error) {
-        return 500
+  try {
+    const docRef = await db.collection(coll).doc(id).get();
+    if (!id) {
+      return 400;
     }
+
+    if (!docRef.exists) {
+      return 404;
+    }
+
+    const data = docRef.data();
+    data.id = docRef.id;
+    return data;
+  } catch (error) {
+    return 500;
+  }
 };
 
 const postToCollection = async (coll, obj) => {
@@ -69,12 +69,12 @@ const postToCollection = async (coll, obj) => {
     if (obj.constructor === Object && Object.keys(obj).length === 0) {
       return 400;
     }
-	
+
     const docRef = await db.collection(coll).add(obj);
-	
-    if(typeof docRef === 'number') {
-        res.sendStatus(docRef)
-        return
+
+    if (typeof docRef === "number") {
+      res.sendStatus(docRef);
+      return;
     }
     return docRef.id;
   } catch (error) {
@@ -126,5 +126,4 @@ module.exports = {
   postToCollection,
   putToCollection,
   deleteFromCollection,
- 
 };
