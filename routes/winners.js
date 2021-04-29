@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
-const getDatabase = require("../database.js");
+const getDatabase = require("../database.js")
 db = getDatabase.getDatabase();
 
 router.get("/", async (req, res) => {
@@ -17,13 +17,13 @@ router.get("/", async (req, res) => {
     const winners = [];
 
     result.forEach((doc) => {
-      winners.push(doc.data());
+      winners.push(doc.data())
     });
 
     res.send(winners);
   } catch (error) {
-    console.log(error.message);
-    res.status(500).send(error.message);
+    console.log(error.message)
+    res.status(500).send(error.message)
   }
 });
 

@@ -9,7 +9,7 @@ router.get("/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    snapshot = await db.collection("matches").where("winnerId", "=", id).get();
+    snapshot = await db.collection("matches").where("winnerId", "=", id).get()
   } catch (error) {
     console.log(error.message);
     res.status(500).send(error.message);
@@ -20,16 +20,16 @@ router.get("/:id", async (req, res) => {
     return;
   }
 
-  const rows = [];
+  const mwinners = [];
 
   snapshot.forEach((doc) => {
-    const data = doc.data();
-    data.id = doc.id;
-    rows.push(data);
-    console.log(data.winnerId, id);
+    const data = doc.data()
+    data.id = doc.id
+    mwinners.push(data)
+    console.log(data.winnerId, id)
   });
 
-  res.send(rows);
+  res.send(mwinners);
 });
 
 module.exports = router;

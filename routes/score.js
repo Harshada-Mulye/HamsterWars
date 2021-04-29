@@ -23,30 +23,30 @@ router.get("/:challanger/:defender", async (req, res) => {
     .get();
 
   challangerWins.forEach((doc) => {
-    const data = doc.data();
+    const data = doc.data()
     data.id = doc.id;
-    challengerItems.push(data);
+    challengerItems.push(data)
   });
 
   challangerLoses.forEach((doc) => {
-    const data = doc.data();
-    data.id = doc.id;
-    defenderItems.push(data);
+    const data = doc.data()
+    data.id = doc.id
+    defenderItems.push(data)
   });
 
   let matches = [];
 
   challengerItems.forEach((game) => {
-    console.log("1");
+    console.log("1")
     if (game.loserId == defender) {
-      matches.push(game);
+      matches.push(game)
     }
   });
 
   defenderItems.forEach((game) => {
-    console.log("2");
+    console.log("2")
     if (game.winnerId == defender) {
-      matches.push(game);
+      matches.push(game)
     }
   });
   console.log(matches);
@@ -57,15 +57,15 @@ router.get("/:challanger/:defender", async (req, res) => {
 
   matches.forEach((game) => {
     if (game.winnerId === challanger) {
-      console.log(gameScore);
-      gameScore.challangerWins++;
+      console.log(gameScore)
+      gameScore.challangerWins++
     }
     if (game.winnerId === defender) {
-      console.log(gameScore);
-      gameScore.defenderWins++;
+      console.log(gameScore)
+      gameScore.defenderWins++
     }
   });
-  res.send(gameScore);
+  res.send(gameScore)
 });
 
 module.exports = router;
